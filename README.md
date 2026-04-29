@@ -10,6 +10,7 @@ This scaffold implements the first-pass database architecture described in the b
 - `pgvector` support for retrieval on `raw.document_chunks`
 - strict write-path separation across `raw`, `promotion`, `ledger`, `sml`, `deliverables`, `audit`, and `system`
 - canonical system-level issue and task-state tables for governed runtime context
+- Python runtime for working memory, promotion, projection, orchestration, and deliverables
 - SQL migrations from day one
 - private storage buckets for research, snapshots, deliverables, and exports
 - backup/export helper scripts for database dumps and Storage copies
@@ -38,6 +39,14 @@ supabase/
     011_views.sql
     012_roles_and_permissions.sql
     013_storage_buckets.sql
+src/
+  financial_model/
+    agents/
+    deliverables/
+    domain/
+    memory/
+    orchestration/
+    persistence/
 ```
 
 ## Quickstart
@@ -60,3 +69,17 @@ The checked-in [`supabase/config.toml`](supabase/config.toml) is intentionally m
 - Weekly logical dumps and Storage exports are part of the baseline operating model.
 
 The setup and cost-control checklist lives in [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+
+## Runtime layers
+
+- `src/financial_model/domain/`: shared types, enums, bucket registry, and settings
+- `src/financial_model/persistence/`: Postgres repository against the Supabase schema
+- `src/financial_model/memory/`: working memory, interpreter, resolver, validator, pending queue, projector, and promotion pipeline
+- `src/financial_model/agents/`: single-role agent base classes and registry
+- `src/financial_model/orchestration/`: run orchestration across agents and deliverable builders
+- `src/financial_model/deliverables/`: deterministic report builders plus canonical deliverable-ref promotion notes
+
+## Local verification
+
+- Compile the runtime: `py -3 -c "import pathlib; [compile(p.read_text(), str(p), 'exec') for p in pathlib.Path('src/financial_model').rglob('*.py')]"`
+- Run unit tests in PowerShell: `$env:PYTHONPATH='src'; py -3 -m unittest discover -s tests -v`
