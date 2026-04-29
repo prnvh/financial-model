@@ -45,8 +45,20 @@ on sml.portfolio_items(symbol, market);
 create index if not exists portfolio_item_notes_item_idx
 on sml.portfolio_item_notes(item_id, note_type, status);
 
+create index if not exists docs_type_status_idx
+on sml.docs(doc_type, status, updated_at desc);
+
 create index if not exists news_items_status_valid_idx
 on sml.news_items(status, valid_until);
+
+create index if not exists system_issues_status_idx
+on sml.system_issues(status, severity, updated_at desc);
+
+create index if not exists system_issues_entity_idx
+on sml.system_issues(entity_type, entity_id);
+
+create index if not exists task_states_status_idx
+on sml.task_states(status, owner_agent);
 
 create index if not exists portfolio_items_payload_gin_idx
 on sml.portfolio_items

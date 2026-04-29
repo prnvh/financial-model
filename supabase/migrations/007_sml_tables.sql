@@ -99,6 +99,37 @@ create table sml.deliverable_refs (
   updated_at timestamptz not null default now()
 );
 
+create table sml.system_issues (
+  issue_id text primary key,
+  title text not null,
+  description text,
+  status text not null default 'open'
+    check (status in ('open', 'resolved', 'invalidated', 'archived')),
+  severity text check (severity in ('low', 'medium', 'high', 'critical')),
+  entity_type text,
+  entity_id text,
+  payload_json jsonb not null default '{}'::jsonb,
+  first_seen_event_id uuid references ledger.events_memory(event_id),
+  last_event_id uuid references ledger.events_memory(event_id),
+  reference_memory_json jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table sml.task_states (
+  task_id text primary key,
+  status text not null
+    check (status in ('pending', 'in_progress', 'blocked', 'done', 'failed', 'cancelled')),
+  phase text,
+  owner_agent text,
+  blockers_json jsonb not null default '[]'::jsonb,
+  payload_json jsonb not null default '{}'::jsonb,
+  first_seen_event_id uuid references ledger.events_memory(event_id),
+  last_event_id uuid references ledger.events_memory(event_id),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
 create trigger set_docs_updated_at
 before update on sml.docs
 for each row
@@ -116,6 +147,16 @@ execute function system.set_updated_at();
 
 create trigger set_news_items_updated_at
 before update on sml.news_items
+for each row
+execute function system.set_updated_at();
+
+create trigger set_system_issues_updated_at
+before update on sml.system_issues
+for each row
+execute function system.set_updated_at();
+
+create trigger set_task_states_updated_at
+before update on sml.task_states
 for each row
 execute function system.set_updated_at();
 

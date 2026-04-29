@@ -18,6 +18,17 @@ where status = 'open'
   and (next_retry_after is null or next_retry_after <= now())
 order by created_at asc;
 
+create view sml.active_constraints as
+select *
+from sml.docs
+where doc_type = 'constraint'
+  and status = 'active';
+
+create view sml.open_system_issues as
+select *
+from sml.system_issues
+where status = 'open';
+
 create view ledger.failed_projections as
 select *
 from ledger.events_memory

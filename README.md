@@ -9,6 +9,7 @@ This scaffold implements the first-pass database architecture described in the b
 - Supabase/Postgres as the single primary database
 - `pgvector` support for retrieval on `raw.document_chunks`
 - strict write-path separation across `raw`, `promotion`, `ledger`, `sml`, `deliverables`, `audit`, and `system`
+- canonical system-level issue and task-state tables for governed runtime context
 - SQL migrations from day one
 - private storage buckets for research, snapshots, deliverables, and exports
 - backup/export helper scripts for database dumps and Storage copies
