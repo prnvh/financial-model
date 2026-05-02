@@ -1,0 +1,215 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Editorial light palette — Palantir AIP */
+    --background: 40 14% 91%;            /* warm cream/off-white */
+    --foreground: 230 18% 12%;           /* near-black ink */
+
+    --surface-0: 40 14% 88%;
+    --surface-1: 40 14% 93%;
+    --surface-2: 40 10% 85%;
+    --surface-3: 40 8% 78%;
+
+    --ink: 230 18% 12%;
+    --ink-soft: 230 12% 30%;
+    --ink-muted: 230 8% 55%;
+
+    --paper: 40 14% 91%;
+    --paper-soft: 40 16% 94%;
+
+    /* Dark inverse — used for hero band, industries block, footer */
+    --night: 230 22% 10%;
+    --night-2: 230 20% 14%;
+    --night-soft: 230 14% 26%;
+    --night-muted: 230 10% 50%;
+
+    --card: 40 14% 91%;
+    --card-foreground: 230 18% 12%;
+
+    --popover: 40 16% 94%;
+    --popover-foreground: 230 18% 12%;
+
+    /* Accent gradient pair: violet -> sky */
+    --primary: 256 70% 60%;              /* violet */
+    --primary-foreground: 40 14% 96%;
+    --primary-2: 205 80% 60%;            /* sky blue */
+
+    --secondary: 40 10% 85%;
+    --secondary-foreground: 230 18% 12%;
+
+    --muted: 40 10% 85%;
+    --muted-foreground: 230 8% 45%;
+
+    --accent: 256 70% 60%;
+    --accent-foreground: 40 14% 96%;
+
+    --warning: 30 90% 50%;
+    --warning-foreground: 230 22% 10%;
+
+    --critical: 0 70% 50%;
+    --critical-foreground: 40 14% 96%;
+
+    --success: 145 50% 40%;
+    --success-foreground: 40 14% 96%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 40 14% 96%;
+
+    --border: 230 10% 78%;
+    --border-strong: 230 12% 60%;
+    --border-night: 230 16% 22%;
+    --input: 230 10% 78%;
+    --ring: 256 70% 60%;
+
+    --radius: 0.125rem;
+
+    --gradient-aip: linear-gradient(90deg, hsl(256 70% 62%) 0%, hsl(230 70% 60%) 40%, hsl(205 80% 62%) 100%);
+
+    --sidebar-background: 40 14% 91%;
+    --sidebar-foreground: 230 18% 12%;
+    --sidebar-primary: 256 70% 60%;
+    --sidebar-primary-foreground: 40 14% 96%;
+    --sidebar-accent: 40 10% 85%;
+    --sidebar-accent-foreground: 230 18% 12%;
+    --sidebar-border: 230 10% 78%;
+    --sidebar-ring: 256 70% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    font-feature-settings: "ss01", "cv11", "tnum";
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: hsl(var(--paper));
+  }
+  .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--ink));
+  }
+}
+
+@layer components {
+  /* The signature AIP gradient text */
+  .text-aip-gradient {
+    background: var(--gradient-aip);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Massive editorial display */
+  .display {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+
+  /* Tiny mono caption */
+  .caption {
+    @apply font-mono text-[11px] uppercase tracking-[0.08em] text-foreground/70;
+  }
+
+  /* Chapter rule [0.1] — 0.2 — 0.3 — 0.4 */
+  .chapter-rule {
+    @apply font-mono text-[11px] tracking-wider text-foreground/40;
+  }
+  .chapter-rule .active {
+    @apply text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-ticker { animation: ticker 60s linear infinite; }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  .animate-pulse-soft { animation: pulse-soft 2.4s ease-in-out infinite; }
+
+  .typing-mark {
+    display: inline-flex;
+    align-items: baseline;
+    min-width: 4.9ch;
+    color: currentColor;
+    white-space: nowrap;
+  }
+
+  .typing-mark::after {
+    content: "";
+    width: 0.04em;
+    height: 0.78em;
+    margin-left: 0.08em;
+    background-color: currentColor;
+    animation: typing-caret 0.75s step-end infinite;
+  }
+
+  @keyframes typing-caret {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  main > section:not(:first-child):not(#chapters) {
+    animation: section-enter 0.7s ease both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+
+  @keyframes section-enter {
+    from {
+      opacity: 0.65;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  #beyond .relative.border,
+  section.bg-paper .relative.border.border-ink\/10 {
+    font-size: 13px;
+  }
+
+  #beyond .relative.border [class*="text-[8px]"],
+  #beyond .relative.border [class*="text-[9px]"],
+  #beyond .relative.border [class*="text-[10px]"],
+  section.bg-paper .relative.border.border-ink\/10 [class*="text-[8px]"],
+  section.bg-paper .relative.border.border-ink\/10 [class*="text-[9px]"],
+  section.bg-paper .relative.border.border-ink\/10 [class*="text-[10px]"] {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  #beyond .relative.border [class*="text-[11px]"],
+  section.bg-paper .relative.border.border-ink\/10 [class*="text-[11px]"] {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+}
